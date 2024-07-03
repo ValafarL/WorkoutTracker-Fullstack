@@ -21,7 +21,11 @@ const register = async (req: Request, res: Response) =>{
         throw new CustomAPIError('Please provide a valid email address', 401)
     }
 
-    const {rows} = await pool.query(`SELECT COUNT(email) FROM users Where email = $1`, [email])
+    const {rows} = await pool.query(`
+        SELECT COUNT(email) 
+        FROM users 
+        Where email = $1`, 
+        [email])
     
     if(rows[0].count > 0){
         throw new CustomAPIError('Email already used', 400)
@@ -29,7 +33,10 @@ const register = async (req: Request, res: Response) =>{
 
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
-    const response =  await pool.query(`INSERT INTO users(email, password, name) VALUES($1, $2, $3)`,[email, hashedPassword, name])
+    const response =  await pool.query(`
+        INSERT INTO users(email, password, name) 
+        VALUES($1, $2, $3)`,
+        [email, hashedPassword, name])
     
     res.status(201).json({msg:'user registered', response:response})
 }
@@ -41,7 +48,10 @@ const login = async (req: Request, res: Response) =>{
         throw new CustomAPIError('Please provide name, email and password', 401)
     }
 
-    const {rows} = await pool.query(`SELECT user_code, email, password, name FROM users Where email = $1`, [email])
+    const {rows} = await pool.query(`
+        SELECT user_code, email, password, name 
+        FROM users Where email = $1`, 
+        [email])
     const user = rows[0]
 
     if(!user){

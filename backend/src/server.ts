@@ -2,9 +2,12 @@ import 'express-async-errors'
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import router from './routes/auth'
-import pool from './db/connect'
 import errorHandlerMiddleware from './middlewares/error-handler'
+
+//routes
+import authRouter from './routes/auth'
+import exercRouter from './routes/exercise'
+import wrkPlanRouter from './routes/workout_plan'
 
 dotenv.config()
 
@@ -17,17 +20,10 @@ app.use(express.json())
 app.get('/', (req,res) => {
     res.send('BEQUI ENDI')
 })
-app.use('/api/auth', router)
-app.get('/api/users', async (req: any, res: any) => {
-    try {
-      const result = await pool.query('SELECT * FROM users'); // Verifique o nome da tabela
-      res.json(result.rows);
-    } catch (err: any) {
-      console.error(err.message);
-      res.status(500).json({ error: 'Database query failed' });
-    }
-  });
-  app.use(errorHandlerMiddleware)
+app.use('/api/auth', authRouter)
+app.use('/api/user', exercRouter)
+app.use('/api/user', wrkPlanRouter)
+app.use(errorHandlerMiddleware)
 
 
 app.listen(PORT, ()=>{
