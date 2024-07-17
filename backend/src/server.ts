@@ -2,12 +2,16 @@ import 'express-async-errors'
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+
+//middlewares
 import errorHandlerMiddleware from './middlewares/error-handler'
+import authorizaion from './middlewares/authorization'
 
 //routes
 import authRouter from './routes/auth'
 import exercRouter from './routes/exercise'
 import wrkPlanRouter from './routes/workout_plan'
+import sessionRouter from './routes/session'
 
 dotenv.config()
 
@@ -21,8 +25,9 @@ app.get('/', (req,res) => {
     res.send('BEQUI ENDI')
 })
 app.use('/api/auth', authRouter)
-app.use('/api/user', exercRouter)
-app.use('/api/user', wrkPlanRouter)
+app.use('/api/user', authorizaion, wrkPlanRouter)
+app.use('/api/user', authorizaion, exercRouter)
+app.use('/api/user', authorizaion, sessionRouter)
 app.use(errorHandlerMiddleware)
 
 

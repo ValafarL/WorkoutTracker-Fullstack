@@ -29,31 +29,34 @@ const createTables = async () => {
         workout_plan_code INTEGER NOT NULL,
         week_days VARCHAR(255),
         title VARCHAR(255),
-        FOREIGN KEY (workout_plan_code) REFERENCES Workout_plan(workout_plan_code)
+        FOREIGN KEY (workout_plan_code) REFERENCES Workout_plan(workout_plan_code) ON DELETE CASCADE
+    );
+
+        CREATE TABLE IF NOT EXISTS Workout_exercises (
+        workout_code INTEGER NOT NULL,
+        exercise_code INTEGER NOT NULL,
+        PRIMARY KEY (workout_code, exercise_code),
+        FOREIGN KEY (workout_code) REFERENCES Workout(workout_code) ON DELETE CASCADE,
+        FOREIGN KEY (exercise_code) REFERENCES Exercises(exercise_code) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS Session (
         session_code SERIAL PRIMARY KEY,
-        sets INTEGER,
-        date DATE
+        workout_code INTEGER NOT NULL,
+        date DATE NOT NULL,
+        FOREIGN KEY (workout_code) REFERENCES Workout(workout_code) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS Set_detail (
-        set_detail_code SERIAL PRIMARY KEY,
+        set_detail_code SERIAL,
         session_code INTEGER NOT NULL,
-        reps INTEGER,
-        weight FLOAT,
-        FOREIGN KEY (session_code) REFERENCES Session(session_code)
-    );
-
-    CREATE TABLE IF NOT EXISTS Workout_session (
-        workout_code INTEGER NOT NULL,
         exercise_code INTEGER NOT NULL,
-        session_code INTEGER NOT NULL,
-        PRIMARY KEY (workout_code, exercise_code, session_code),
-        FOREIGN KEY (workout_code) REFERENCES Workout(workout_code),
-        FOREIGN KEY (exercise_code) REFERENCES Exercises(exercise_code),
-        FOREIGN KEY (session_code) REFERENCES Session(session_code)
+        set INTEGER NOT NULL,
+        reps INTEGER NOT NULL,
+        weight FLOAT NOT NULL,
+        PRIMARY KEY (set_detail_code, session_code, exercise_code),
+        FOREIGN KEY (session_code) REFERENCES Session(session_code) ON DELETE CASCADE,
+        FOREIGN KEY (exercise_code) REFERENCES Exercises(exercise_code) ON DELETE CASCADE
     );
   `;
 

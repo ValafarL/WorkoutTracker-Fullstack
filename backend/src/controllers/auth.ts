@@ -68,7 +68,7 @@ const login = async (req: Request, res: Response) =>{
       throw new Error('JWT_SECRET is not defined in environment variables');
     }
 
-    const JWT = jwt.sign({userID:user.user_code, name: user.name}, 
+    const JWT = jwt.sign({user_code:user.user_code, name: user.name}, 
         jwtSecret as string,
         {
         expiresIn: '5h'

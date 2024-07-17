@@ -1,0 +1,20 @@
+.home{
+    background-color: rgb(77, 76, 75);
+    width: 1150px;
+    height: 90vh;
+    margin: 5vh auto;
+  }
+header{
+    height: 100px;
+}
+.container-workoutPlan{
+    display: flex;
+    justify-content: space-between;
+}
+.container-info-workoutPlan{
+    background-color: green;
+    display: flex;
+    width: 400px;
+    flex-direction: row;
+    justify-content: space-between;
+}
